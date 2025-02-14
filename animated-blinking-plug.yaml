@@ -1,0 +1,38 @@
+type: custom:mushroom-entity-card
+card_mod:
+  style:
+    mushroom-shape-icon$: |
+      .shape {
+        --shape-animation:
+        {%- set sensor = states('sensor.plug_1_local_power') %}
+        {%- if sensor == '0.0' %} ping 0s infinite;
+        {%- elif sensor == 'unknown' %} ping 0s infinite;
+        {%- elif sensor == 'unavailable' %} ping 0s infinite;
+        {%- else %} ping 1s infinite;
+        {%- endif %}
+      }
+      @keyframes ping {
+        0% { box-shadow: 0 0 1px 1px rgba(var(--rgb-{{ config.icon_color }}), 0.7); }
+        100% { box-shadow: 0 0 5px 15px transparent; }
+      }
+    .: |
+      mushroom-shape-icon {
+        --icon-size: 65px;
+        display: flex;
+        margin: -22px 0px 0px -22px !important;
+      }
+      ha-card {
+        clip-path: inset(0 0 0 0 round var(--ha-card-border-radius, 12px));
+      }
+entity: switch.plug_1_local
+icon: mdi:server
+primary_info: name
+name: Plug 1 - Server
+icon_color: blue
+secondary_info: state
+double_tap_action:
+  action: none
+hold_action:
+  action: more-info
+tap_action:
+  action: none
